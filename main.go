@@ -3,12 +3,16 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"assn.com/db"
 	"assn.com/routes"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load(".env")
+
 	client, err := db.ConnectToDB()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -45,5 +49,5 @@ func main() {
 	apply := routes.ApplyToJob{Collection: jobsColl}
 	http.Handle("/jobs/apply", &apply)
 
-	http.ListenAndServe(":4000", nil)
+	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 }
